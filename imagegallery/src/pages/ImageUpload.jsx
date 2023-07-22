@@ -4,26 +4,28 @@ import Dropzone from "react-dropzone";
 
 function ImageUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [keyWords, setkeyWords] = useState();
 
   const handleFileChange = (files) => {
     setSelectedFile(files[0]);
   };
-
+  const handleInputChange = (e) => {
+    setkeyWords(e.target.value);
+    console.log(keyWords);
+  };
   const handleFileUpload = async () => {
     try {
       if (selectedFile) {
+        const myArray = keyWords.split(",");
         const formData = new FormData();
         formData.append("file", selectedFile);
+        formData.append("keys", myArray);
 
-        await axios.post(
-          "https://splendid-getup-goat.cyclic.app/image/upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        await axios.post("http://localhost:5000/image/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
         // Do something after successful upload
         console.log("Image uploaded successfully!");
@@ -34,7 +36,15 @@ function ImageUpload() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        margin: "auto",
+        width: "600px",
+        padding: "40px",
+        boxShadow: "1px 1px 10px black",
+        marginBottom: "60px",
+      }}
+    >
       <h2>Image Upload</h2>
       <Dropzone onDrop={handleFileChange}>
         {({ getRootProps, getInputProps }) => (
@@ -51,8 +61,15 @@ function ImageUpload() {
           </div>
         )}
       </Dropzone>
-      <button onClick={handleFileUpload}>Upload</button>
-      {/* <button onClick={getAllImages}>GetAll</button> */}
+      <input
+        type="text"
+        placeholder="Enter words seprated with comma"
+        style={{ width: "500px", marginRight: "10px", padding: "10px" }}
+        onChange={handleInputChange}
+      />
+      <button style={{ marginTop: "30px" }} onClick={handleFileUpload}>
+        Upload
+      </button>
     </div>
   );
 }

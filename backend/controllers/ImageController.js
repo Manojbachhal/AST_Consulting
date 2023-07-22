@@ -1,52 +1,79 @@
 const ImageModel = require("../models/imageModel");
-
+const fs = require("fs");
+const path = require("path");
 const getSingleImage = (filename) => {
   const data = ImageModel.find({ image: filename });
-  console.log(image, likes);
+  // console.log(image, likes);
 };
-const uploadImage = (filename, likes = 0) => {
-  ImageModel.create({ image: filename, likes });
+const uploadImage = (filename, key, likes = 0) => {
+  const myArray = key.split(",");
+  console.log(myArray);
+  const newImage = { image: filename, key: myArray, likes };
+  ImageModel.create(newImage);
 };
 
-const getAllimages = () => {
+const getAllimages = async () => {
   try {
     // Reading the directory where the images are stored
-    const imageFolder = "public/uploads";
+    const imageFiles = await ImageModel.find();
 
-    // Reading the file names in the image folder
-    fs.readdir(imageFolder, (err, files) => {
-      if (err) {
-        console.error("Error reading the image folder:", err);
-        return res.status(500).json({ error: "Failed to fetch images" });
-      }
-
-      // const imageFiles = files.filter((file) => {
-      //   const ext = path.extname(file).toLowerCase();
-      //   return [".jpg", ".jpeg", ".png", ".gif", ".bmp"].includes(ext);
-      // });
-
-      // Create an array to store image URLs
-      const Imagedata = ImageModel.find({});
-      const imageUrls = Imagedata.map((ele) => {
-        return {
-          ...ele,
-          image: `https://splendid-getup-goat.cyclic.app/uploads/${ele.image}`,
-        };
-      });
-      // const imageUrls = imageFiles.map((file) => {
-      //   return `https://splendid-getup-goat.cyclic.app/uploads/${file}`;
-      // });
-
-      // Send the image URLs as the response
-      return imageUrls;
+    const imageUrls = imageFiles.map((file) => {
+      return {
+        _id: file.id,
+        key: file.key,
+        likes: file.likes,
+        comment: file.comment,
+        image: `http://localhost:5000/uploads/${file.image}`,
+      };
     });
+
+    // Send the image URLs as the response
+    return imageUrls;
   } catch (error) {
-    console.error("Error fetching images:", error);
+    // console.error("Error fetching images:", error);
     return res.status(500).json({ error: "Failed to fetch images" });
+  }
+};
+
+const updateLikes = async ({ _id, likes }) => {
+  try {
+    // Find the image by its ID
+    const image = await ImageModel.findById(_id);
+
+    if (!image) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+    // console.log(image);
+    // Update the likes for the image
+    image.likes = likes;
+    await image.save();
+
+    return { message: "Likes updated successfully" };
+  } catch (error) {
+    return error;
+  }
+};
+const updateComment = async ({ _id, commentdata }) => {
+  try {
+    // Find the image by its ID
+    const image = await ImageModel.findById(_id);
+
+    if (!image) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    image.comment = [...image.comment, commentdata];
+    await image.save();
+
+    return { message: "Likes updated successfully" };
+  } catch (error) {
+    return error;
   }
 };
 
 module.exports = {
   uploadImage,
   getAllimages,
+  updateLikes,
+  updateComment,
 };

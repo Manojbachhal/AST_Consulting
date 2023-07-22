@@ -1,12 +1,13 @@
+import Allroutes from "./Allroutes/Allroutes";
 import "./App.css";
-import Gallery from "./pages/Gallery";
-import ImageUpload from "./pages/ImageUpload";
+import Header from "./Components/Header";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <div className="App">
-      {/* <ImageUpload /> */}
-      <Gallery />
+      <Header />
+      <Allroutes />
     </div>
   );
 }

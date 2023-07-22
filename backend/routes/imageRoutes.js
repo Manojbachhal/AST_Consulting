@@ -3,7 +3,12 @@ const multer = require("multer");
 const router = express.Router();
 const path = require("path");
 const fs = require("fs");
-const { uploadImage, getAllimages } = require("../controllers/ImageController");
+const {
+  uploadImage,
+  getAllimages,
+  updateLikes,
+  updateComment,
+} = require("../controllers/ImageController");
 const PORT = 5000;
 const storage = multer.diskStorage({
   destination: (req, res, cb) => {
@@ -23,7 +28,7 @@ const upload = multer({
 
 router.post("/upload", upload.single("file"), (req, res) => {
   try {
-    let result = uploadImage(req.file.filename);
+    let result = uploadImage(req.file.filename, req.body.keys);
     res.send(result);
   } catch (error) {
     res.send("Error while uploading");
@@ -31,8 +36,34 @@ router.post("/upload", upload.single("file"), (req, res) => {
 });
 
 router.get("/allimages", async (req, res) => {
-  let imageUrls = await getAllimages();
-  res.json({ images: imageUrls });
+  try {
+    let imageUrls = await getAllimages();
+    res.send(imageUrls);
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to fetch images" });
+  }
+});
+
+router.post("/updateLike", async (req, res) => {
+  const { _id, likes } = req.body;
+  try {
+    let result = await updateLikes({ _id, likes });
+    res.json({ message: "Likes updated successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to update likes" });
+  }
+  // console.log("call");
+});
+
+router.post("/addcomment", async (req, res) => {
+  const { _id, commentdata } = req.body;
+  try {
+    let result = await updateComment({ _id, commentdata });
+    res.json({ message: "comment updated successfully" });
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to update likes" });
+  }
+  // console.log("call");
 });
 
 module.exports = router;
