@@ -4,7 +4,6 @@ const app = express();
 const cors = require("cors");
 const { connection } = require("./configs/Connection");
 const imageRoutes = require("./routes/imageRoutes");
-const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -16,7 +15,7 @@ app.get("/", async (req, res) => {
 });
 app.use("/image", imageRoutes);
 
-app.listen(PORT, async () => {
+app.listen(process.env.PORT, async () => {
   try {
     await connection();
     console.log(`Server is running on ${process.env.PORT}`);
