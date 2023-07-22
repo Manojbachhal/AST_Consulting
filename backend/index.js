@@ -17,7 +17,7 @@ app.use("/image", imageRoutes);
 
 app.listen(process.env.PORT, async () => {
   try {
-    await connection();
+    await connection;
     console.log(`Server is running on ${process.env.PORT}`);
   } catch (error) {
     // console.log("Error while Connecting");

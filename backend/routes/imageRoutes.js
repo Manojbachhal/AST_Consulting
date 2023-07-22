@@ -3,7 +3,7 @@ const multer = require("multer");
 const router = express.Router();
 const path = require("path");
 const fs = require("fs");
-const { uploadImage } = require("../controllers/ImageController");
+const { uploadImage, getAllimages } = require("../controllers/ImageController");
 const PORT = 5000;
 const storage = multer.diskStorage({
   destination: (req, res, cb) => {
@@ -31,34 +31,8 @@ router.post("/upload", upload.single("file"), (req, res) => {
 });
 
 router.get("/allimages", async (req, res) => {
-  try {
-    // Reading the directory where the images are stored
-    const imageFolder = "public/uploads";
-
-    // Reading the file names in the image folder
-    fs.readdir(imageFolder, (err, files) => {
-      if (err) {
-        console.error("Error reading the image folder:", err);
-        return res.status(500).json({ error: "Failed to fetch images" });
-      }
-
-      const imageFiles = files.filter((file) => {
-        const ext = path.extname(file).toLowerCase();
-        return [".jpg", ".jpeg", ".png", ".gif", ".bmp"].includes(ext);
-      });
-
-      // Create an array to store image URLs
-      const imageUrls = imageFiles.map((file) => {
-        return `https://splendid-getup-goat.cyclic.app/uploads/${file}`;
-      });
-
-      // Send the image URLs as the response
-      return res.json({ images: imageUrls });
-    });
-  } catch (error) {
-    console.error("Error fetching images:", error);
-    return res.status(500).json({ error: "Failed to fetch images" });
-  }
+  let imageUrls = await getAllimages();
+  res.json({ images: imageUrls });
 });
 
 module.exports = router;

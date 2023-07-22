@@ -33,13 +33,6 @@ function ImageUpload() {
     }
   };
 
-  const getAllImages = async () => {
-    let res = await axios.get(
-      "https://splendid-getup-goat.cyclic.app/image/allimages"
-    );
-    console.log(res);
-  };
-
   return (
     <div>
       <h2>Image Upload</h2>
@@ -59,7 +52,7 @@ function ImageUpload() {
         )}
       </Dropzone>
       <button onClick={handleFileUpload}>Upload</button>
-      <button onClick={getAllImages}>GetAll</button>
+      {/* <button onClick={getAllImages}>GetAll</button> */}
     </div>
   );
 }
