@@ -15,11 +15,15 @@ function ImageUpload() {
         const formData = new FormData();
         formData.append("file", selectedFile);
 
-        await axios.post("http://localhost:5000/image/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        await axios.post(
+          "https://splendid-getup-goat.cyclic.app/image/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
         // Do something after successful upload
         console.log("Image uploaded successfully!");
@@ -30,7 +34,9 @@ function ImageUpload() {
   };
 
   const getAllImages = async () => {
-    let res = await axios.get("http://localhost:5000/image/allimages");
+    let res = await axios.get(
+      "https://splendid-getup-goat.cyclic.app/image/allimages"
+    );
     console.log(res);
   };
 

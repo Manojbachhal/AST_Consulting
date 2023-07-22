@@ -49,7 +49,7 @@ router.get("/allimages", async (req, res) => {
 
       // Create an array to store image URLs
       const imageUrls = imageFiles.map((file) => {
-        return `http://localhost:${PORT}/uploads/${file}`;
+        return `https://splendid-getup-goat.cyclic.app/uploads/${file}`;
       });
 
       // Send the image URLs as the response
