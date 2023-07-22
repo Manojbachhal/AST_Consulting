@@ -10,6 +10,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use(express.static("public"));
+
+app.get("/", async (req, res) => {
+  res.send(`<h1>Backend Working Properly</h1>`);
+});
 app.use("/image", imageRoutes);
 
 app.listen(PORT, async () => {
