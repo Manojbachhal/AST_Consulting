@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Dropzone from "react-dropzone";
+import { Box, Button, Heading, Input, Text } from "@chakra-ui/react";
 
 function ImageUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -39,13 +40,14 @@ function ImageUpload() {
     <div
       style={{
         margin: "auto",
+        marginTop: "40px",
         width: "600px",
-        padding: "40px",
+        padding: "60px",
         boxShadow: "1px 1px 10px black",
         marginBottom: "60px",
+        borderRadius: "40px",
       }}
     >
-      <h2>Image Upload</h2>
       <Dropzone onDrop={handleFileChange}>
         {({ getRootProps, getInputProps }) => (
           <div
@@ -61,15 +63,24 @@ function ImageUpload() {
           </div>
         )}
       </Dropzone>
-      <input
-        type="text"
-        placeholder="Enter words seprated with comma"
-        style={{ width: "500px", marginRight: "10px", padding: "10px" }}
-        onChange={handleInputChange}
-      />
-      <button style={{ marginTop: "30px" }} onClick={handleFileUpload}>
-        Upload
-      </button>
+      <Box marginTop={"20px"}>
+        <legend style={{ fontWeight: "bold" }}>Keyword related to image</legend>
+        <Input
+          type="text"
+          placeholder="Enter keywords separated with a comma, e.g., anime, animals"
+          style={{
+            width: "500px",
+            marginTop: "10px",
+            marginRight: "10px",
+            padding: "10px",
+          }}
+          required={true}
+          onChange={handleInputChange}
+        />
+        <Button style={{ marginTop: "30px" }} onClick={handleFileUpload}>
+          Upload
+        </Button>
+      </Box>
     </div>
   );
 }

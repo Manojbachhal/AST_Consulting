@@ -1,0 +1,41 @@
+/* YourComponent.css */
+
+.masonry-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px; /* The spacing between masonry items */
+  }
+  
+  .masonry-item {
+    flex: 1 0 calc(33.33% - 4px); /* 3 columns with 4px spacing between them */
+    margin-bottom: 4px;
+  }
+  
+  .masonry-item img {
+    width: 100%;
+    height: auto; /* Maintain the aspect ratio */
+  }
+  
+  /* .button-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  } */
+  
+  /* .button-group button {
+    border: 1px solid red;
+    background: transparent;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+  } */
+  
+  /* .icon {
+    font-size: 20px;
+    margin-left: 5px;
+    color: red;
+  } */
+  
+  /* Adjust the styles as needed */
+  
