@@ -9,7 +9,7 @@ const getSingleImage = (filename) => {
 
 const uploadImage = (filename, key, likes = 0) => {
   const myArray = key.split(",");
-  console.log(myArray);
+  // console.log(myArray);
   const newImage = { image: filename, key: myArray, likes };
   ImageModel.create(newImage);
 };
@@ -115,10 +115,25 @@ const createAlbum = async (albumName, imageUrl) => {
   }
 };
 
+const getAlbum = async () => {
+  const newAL = [];
+  let res = await Album.find();
+  for (let i = 0; i < res.length; i++) {
+    let newAlbum = res[i].albums;
+    for (let j = 0; j < newAlbum.length; j++) {
+      newAL.push(newAlbum[j].name);
+      // console.log(newAlbum[j].name);
+    }
+  }
+  // console.log(newAL);
+  return newAL;
+};
+
 module.exports = {
   uploadImage,
   getAllimages,
   updateLikes,
   updateComment,
   createAlbum,
+  getAlbum,
 };

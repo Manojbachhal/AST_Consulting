@@ -19,9 +19,19 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Text,
+  Grid,
+  Link,
+  Heading,
 } from "@chakra-ui/react";
 import "./style.css";
-const SecondModal = ({ isOpen2, setIsOpen2, imageUrl }) => {
+const SecondModal = ({
+  isOpen2,
+  setIsOpen2,
+  imageUrl,
+  albumName,
+  setAlbumname,
+}) => {
   const [AlbumnData, setAlbumData] = useState("");
 
   const onClose = () => {
@@ -29,6 +39,14 @@ const SecondModal = ({ isOpen2, setIsOpen2, imageUrl }) => {
       isOpen: !isOpen2,
       imageUrl: "",
     });
+  };
+
+  const getAlbums = async () => {
+    let res = await axios.get("http://localhost:5000/image/albumnames");
+    // console.log(res);
+    setAlbumname(res.data);
+
+    // console.log(res);
   };
 
   // const onOpen = () => {
@@ -44,7 +62,8 @@ const SecondModal = ({ isOpen2, setIsOpen2, imageUrl }) => {
       imageUrl,
       albumName: AlbumnData,
     });
-    console.log(res);
+    getAlbums();
+    // console.log(res);
   };
 
   return (
@@ -53,9 +72,19 @@ const SecondModal = ({ isOpen2, setIsOpen2, imageUrl }) => {
       <Modal isOpen={isOpen2} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Second Modal Title</ModalHeader>
+          <ModalHeader>Add Image To Album</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <Heading fontSize={"18px"}>Your albums</Heading>
+            <Grid gridTemplateColumns={"repeat(4,1fr)"} margin={"20px"}>
+              {albumName.map((albumNames) => {
+                return (
+                  <Text key={albumNames} color={"blue.600"}>
+                    #{albumNames}
+                  </Text>
+                );
+              })}
+            </Grid>
             {
               <form>
                 <input
@@ -106,11 +135,17 @@ function Gallery() {
     index: -1,
   });
   const [keyWords, setkeyWords] = useState("");
-  // const [commentsVisibility, setCommentsVisibility] = useState([]);
-  // const [hoverButtonsVisibility, setButtonsVisibility] = useState([]);
   const [commentdata, setCommentData] = useState("");
+  const [albumName, setAlbumname] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const getAlbums = async () => {
+    let res = await axios.get("http://localhost:5000/image/albumnames");
+    // console.log(res);
+    setAlbumname(res.data);
+
+    // console.log(res);
+  };
   const handleInputChange = (e) => {
     setkeyWords(e.target.value);
     // console.log(keyWords);
@@ -234,12 +269,13 @@ function Gallery() {
 
                 {/* =======================Albumn button==================================== */}
                 <Button
-                  onClick={() =>
+                  onClick={() => {
                     setIsOpen2({
                       isOpen: !isOpen2.isOpen,
                       imageUrl: images.image,
-                    })
-                  }
+                    });
+                    getAlbums();
+                  }}
                 >
                   <TbAlbum
                     style={{
@@ -323,7 +359,13 @@ function Gallery() {
 
       {/* =================Album popup model==================================== */}
       <Box>
-        <SecondModal isOpen2={isOpen2.isOpen} setIsOpen2={setIsOpen2} />
+        <SecondModal
+          isOpen2={isOpen2.isOpen}
+          setIsOpen2={setIsOpen2}
+          imageUrl={isOpen2.imageUrl}
+          albumName={albumName}
+          setAlbumname={setAlbumname}
+        />
       </Box>
     </>
   );

@@ -4,6 +4,7 @@ const app = express();
 const cors = require("cors");
 const { connection } = require("./configs/Connection");
 const imageRoutes = require("./routes/imageRoutes");
+const loginRoutes = require("./routes/LoginRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -14,6 +15,7 @@ app.get("/", async (req, res) => {
   res.send(`<h1>Backend Working Properly</h1>`);
 });
 app.use("/image", imageRoutes);
+app.use("/user", loginRoutes);
 
 app.listen(process.env.PORT, async () => {
   try {
