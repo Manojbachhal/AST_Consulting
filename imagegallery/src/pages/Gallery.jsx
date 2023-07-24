@@ -21,7 +21,6 @@ import {
   useDisclosure,
   Text,
   Grid,
-  Link,
   Heading,
 } from "@chakra-ui/react";
 import "./style.css";
