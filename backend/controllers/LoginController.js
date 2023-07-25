@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const bycrpt = require("bcryptjs");
+// const bycrpt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const register = async ({ name, email, password }) => {
   // console.log({ name, lastname, email, password, });
@@ -11,7 +11,7 @@ const register = async ({ name, email, password }) => {
   let user = await User.create({
     name,
     email,
-    password: bycrpt.hashSync(password),
+    password,
   });
   user.toJSON();
   // console.log(delete user.password);
@@ -25,7 +25,8 @@ const GenerateToken = (user) => {
     email: user.email,
     name: user.name,
   };
-
+  // let token = jwt.sign(payload, "fsdfsdfsd");
+  // console.log(token);
   return jwt.sign(payload, "kasndfksdn@-dsn");
 };
 
@@ -33,12 +34,11 @@ const login = async ({ email, password }) => {
   let user = await User.findOne({ email });
   if (user) {
     user = user.toJSON();
-    if (bycrpt.compareSync(password, user.password)) {
+    console.log(user);
+    if (password === user.password) {
       delete user.password;
-      console.log(user);
       return {
         token: GenerateToken(user),
-        data: user,
       };
     }
   }

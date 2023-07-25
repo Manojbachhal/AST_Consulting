@@ -46,6 +46,7 @@ router.get("/loggedin", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  console.log("first");
   try {
     const { email, password } = req.body;
     const user = await login({ email, password });

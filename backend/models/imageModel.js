@@ -8,7 +8,12 @@ const Imageschema = mongoose.Schema({
     default: [],
   },
   comment: {
-    type: [String],
+    type: [
+      {
+        user: String,
+        data: String,
+      },
+    ],
     default: [],
   },
   createdAt: {

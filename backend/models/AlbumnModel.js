@@ -19,6 +19,9 @@ const Albumschema = mongoose.Schema({
           type: [String], // Array of image URLs
           default: [],
         },
+        user: {
+          type: String,
+        },
       },
     ],
     default: [],

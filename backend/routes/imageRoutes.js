@@ -58,9 +58,9 @@ router.post("/updateLike", async (req, res) => {
 });
 
 router.post("/addcomment", async (req, res) => {
-  const { _id, commentdata } = req.body;
+  const { _id, commentdata, token } = req.body;
   try {
-    let result = await updateComment({ _id, commentdata });
+    let result = await updateComment({ _id, commentdata, token });
     res.json({ message: "comment updated successfully" });
   } catch (error) {
     return res.status(500).json({ error: "Failed to update likes" });
@@ -69,9 +69,10 @@ router.post("/addcomment", async (req, res) => {
 });
 
 router.post("/createalbum", async (req, res) => {
-  const { albumName, imageUrl } = req.body;
+  const { albumName, imageUrl, token } = req.body;
+  console.log(imageUrl);
   try {
-    let result = await createAlbum(albumName, imageUrl);
+    let result = await createAlbum(albumName, imageUrl, token);
     // console.log(result);
     res.send({ message: result.message });
   } catch (error) {

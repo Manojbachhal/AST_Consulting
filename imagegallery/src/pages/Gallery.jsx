@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AiTwotoneHeart } from "react-icons/ai";
 import { AiOutlineComment } from "react-icons/ai";
@@ -31,6 +31,7 @@ const SecondModal = ({
   albumName,
   setAlbumname,
 }) => {
+  // console.log(imageUrl);
   const [AlbumnData, setAlbumData] = useState("");
 
   const onClose = () => {
@@ -56,10 +57,13 @@ const SecondModal = ({
     setAlbumData(e.target.value);
   };
 
-  const handleAlbumreq = async (imageUrl) => {
+  const handleAlbumreq = async () => {
+    console.log(imageUrl);
+    let token = JSON.parse(localStorage.getItem("Token"));
     let res = await axios.post("http://localhost:5000/image/createalbum", {
       imageUrl,
       albumName: AlbumnData,
+      token,
     });
     getAlbums();
     // console.log(res);
@@ -161,13 +165,19 @@ function Gallery() {
   };
 
   const handleCommentreq = async (id, index) => {
+    let token = JSON.parse(localStorage.getItem("Token"));
+
     let res = await axios.post("http://localhost:5000/image/addcomment", {
       _id: id,
       commentdata,
+      token,
     });
     if (res.data.message === "comment updated successfully") {
       const updatedData = [...state]; // Create a copy of the state array
-      updatedData[index].comment.push(commentdata); // Update the copy with the new comment
+
+      let user = JSON.parse(localStorage.getItem("User"));
+
+      updatedData[index].comment.push({ user, data: commentdata }); // Update the copy with the new comment
 
       setState(updatedData); // Update the state with the modified copy
       setCommentData("");
@@ -299,22 +309,26 @@ function Gallery() {
             <ModalBody>
               {commentpopupData.comments?.map((element, i) => {
                 return (
-                  <p
-                    style={{
-                      // margin: "4px",
-                      background: "#F0F2F5",
-                      padding: "6px 10px",
-                      borderRadius: "20px",
-                      fontSize: "12px",
-                      margin: "10px 20px",
-                    }}
-                    key={element.toString() + i}
-                  >
-                    {element}
-                  </p>
+                  <div>
+                    <p
+                      style={{
+                        // margin: "4px",
+                        background: "#F0F2F5",
+                        padding: "6px 10px",
+                        borderRadius: "20px",
+                        fontSize: "12px",
+                      }}
+                      key={element.toString() + i}
+                    >
+                      {element.data}
+                    </p>
+                    <p style={{ textAlign: "end", margin: "0px 0px 15px 0px" }}>
+                      <sub>By {element.user}</sub>
+                    </p>
+                  </div>
                 );
               })}
-              <form>
+              <form style={{ marginTop: "40px" }}>
                 <input
                   style={{
                     borderRadius: "30px",

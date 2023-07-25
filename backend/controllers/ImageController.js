@@ -2,6 +2,7 @@ const ImageModel = require("../models/imageModel");
 const fs = require("fs");
 const path = require("path");
 const Album = require("../models/AlbumnModel");
+const { verifyTOken } = require("./LoginController");
 const getSingleImage = (filename) => {
   const data = ImageModel.find({ image: filename });
   // console.log(image, likes);
@@ -55,7 +56,8 @@ const updateLikes = async ({ _id, likes }) => {
     return error;
   }
 };
-const updateComment = async ({ _id, commentdata }) => {
+const updateComment = async ({ _id, commentdata, token }) => {
+  let user = verifyTOken(token);
   try {
     // Find the image by its ID
     const image = await ImageModel.findById(_id);
@@ -64,20 +66,24 @@ const updateComment = async ({ _id, commentdata }) => {
       return res.status(404).json({ error: "Image not found" });
     }
 
-    image.comment = [...image.comment, commentdata];
+    image.comment = [...image.comment, { user: user.email, data: commentdata }];
     await image.save();
 
-    return { message: "Likes updated successfully" };
+    return { message: "Comment updated successfully" };
   } catch (error) {
     return error;
   }
 };
 
-const createAlbum = async (albumName, imageUrl) => {
+const createAlbum = async (albumName, imageUrl, token) => {
+  let user = verifyTOken(token);
+  // console.log(imageUrl);
+  // console.log(user);
   try {
     // Check if an album with the same name already exists in the database
     const existingAlbum = await Album.findOne({
       "albums.name": albumName,
+      userid: user.email,
     });
 
     if (existingAlbum) {
@@ -95,7 +101,7 @@ const createAlbum = async (albumName, imageUrl) => {
     } else {
       // If the album does not exist, create a new album with the given name and the new image URL
       const newAlbum = new Album({
-        userid: "user123", // Replace with the appropriate user ID
+        userid: user.email, // Replace with the appropriate user ID
         albums: [
           {
             name: albumName,

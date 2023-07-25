@@ -7,16 +7,19 @@ import {
   Input,
   Button,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import imageUrl from "../assets/signup.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { myContext } from "../context/Contextapi";
 function Login() {
   const [inputData, setInputData] = useState({
     email: "",
     password: "",
   });
   const navigate = useNavigate();
+
+  const { islogin, setLogin } = useContext(myContext);
 
   const handle = (e) => {
     let name = e.target.name;
@@ -35,9 +38,10 @@ function Login() {
           password: inputData.password,
         }
       );
-      console.log(Logindata);
-      // localStorage.setItem("userName", JSON.stringify(Logindata.data.user.data.name + " " + Logindata.data.user.data.lastname))
-      // localStorage.setItem("Token", JSON.stringify(Logindata.data.user.token))
+      // console.log(Logindata.data.user.token);
+      localStorage.setItem("Token", JSON.stringify(Logindata.data.user.token));
+      localStorage.setItem("User", JSON.stringify(inputData.email));
+      setLogin(!islogin);
       // signinAction(true);
 
       // console.log(Logindata.data.user.token)

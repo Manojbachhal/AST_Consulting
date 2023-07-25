@@ -25,7 +25,8 @@ function Signup() {
     let value = e.target.value;
     setInputData({ ...inputData, [name]: value });
   };
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       let data = await axios.post("http://localhost:5000/user/register", {
         name: inputData.name,
@@ -33,6 +34,7 @@ function Signup() {
         email: inputData.email,
         password: inputData.password,
       });
+      // console.log(data.data.message);
       if (data) {
         // toast.success("Registration Sucessful Redirecting to Login page", {
         //   position: "top-center",
@@ -44,9 +46,9 @@ function Signup() {
         //   progress: undefined,
         //   theme: "colored",
         // });
-        setTimeout(() => {
-          navigate("/sign-in");
-        }, 2000);
+        // setTimeout(() => {
+        navigate("/sign-in");
+        // }, 2000);
 
         console.log(data);
       }
