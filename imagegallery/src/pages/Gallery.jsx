@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { AiTwotoneHeart } from "react-icons/ai";
 import { AiOutlineComment } from "react-icons/ai";
@@ -22,8 +22,14 @@ import {
   Text,
   Grid,
   Heading,
+  Input,
+  InputGroup,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import "./style.css";
+import { toast } from "react-toastify";
+import { SearchIcon } from "@chakra-ui/icons";
+
 const SecondModal = ({
   isOpen2,
   setIsOpen2,
@@ -31,7 +37,6 @@ const SecondModal = ({
   albumName,
   setAlbumname,
 }) => {
-  // console.log(imageUrl);
   const [AlbumnData, setAlbumData] = useState("");
 
   const onClose = () => {
@@ -43,10 +48,7 @@ const SecondModal = ({
 
   const getAlbums = async () => {
     let res = await axios.get("http://localhost:5000/image/albumnames");
-    // console.log(res);
     setAlbumname(res.data);
-
-    // console.log(res);
   };
 
   // const onOpen = () => {
@@ -58,15 +60,42 @@ const SecondModal = ({
   };
 
   const handleAlbumreq = async () => {
-    console.log(imageUrl);
     let token = JSON.parse(localStorage.getItem("Token"));
-    let res = await axios.post("http://localhost:5000/image/createalbum", {
+    await axios.post("http://localhost:5000/image/createalbum", {
       imageUrl,
       albumName: AlbumnData,
       token,
     });
+    toast.success("Image Added to Album successfully", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
     getAlbums();
-    // console.log(res);
+  };
+  const handleAlbumreqPrev = async (name) => {
+    let token = JSON.parse(localStorage.getItem("Token"));
+    await axios.post("http://localhost:5000/image/createalbum", {
+      imageUrl,
+      albumName: name,
+      token,
+    });
+    toast.success("Image Added to Album successfully", {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    getAlbums();
   };
 
   return (
@@ -79,10 +108,25 @@ const SecondModal = ({
           <ModalCloseButton />
           <ModalBody>
             <Heading fontSize={"18px"}>Your albums</Heading>
+            <Text
+              fontSize={"14px"}
+              marginTop={"10px"}
+              color={"blue"}
+              fontStyle={"italic"}
+            >
+              Create a new album or Click on exiting albums to add the image
+            </Text>
             <Grid gridTemplateColumns={"repeat(4,1fr)"} margin={"20px"}>
               {albumName.map((albumNames) => {
                 return (
-                  <Text key={albumNames} color={"blue.600"}>
+                  <Text
+                    key={albumNames}
+                    color={"blue.600"}
+                    cursor={"pointer"}
+                    onClick={() => {
+                      handleAlbumreqPrev(albumNames);
+                    }}
+                  >
                     #{albumNames}
                   </Text>
                 );
@@ -100,7 +144,7 @@ const SecondModal = ({
                   placeholder="Enter Album Name"
                   onChange={handleAlbumn}
                 />
-                <button
+                <Button
                   onClick={(e) => {
                     e.preventDefault();
                     handleAlbumreq();
@@ -111,7 +155,7 @@ const SecondModal = ({
                   <BsArrowRightCircleFill
                     style={{ color: "blue", fontSize: "30px" }}
                   ></BsArrowRightCircleFill>
-                </button>
+                </Button>
               </form>
             }
           </ModalBody>
@@ -127,6 +171,7 @@ const SecondModal = ({
 };
 
 function Gallery() {
+  const [SearchData, setSearch] = useState();
   const [isOpen2, setIsOpen2] = useState({
     isOpen: false,
     imageUrl: "",
@@ -137,25 +182,20 @@ function Gallery() {
     comments: [],
     index: -1,
   });
-  const [keyWords, setkeyWords] = useState("");
+  // const [keyWords, setkeyWords] = useState("");
   const [commentdata, setCommentData] = useState("");
   const [albumName, setAlbumname] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getAlbums = async () => {
     let res = await axios.get("http://localhost:5000/image/albumnames");
-    // console.log(res);
     setAlbumname(res.data);
-
-    // console.log(res);
   };
-  const handleInputChange = (e) => {
-    setkeyWords(e.target.value);
-    // console.log(keyWords);
-  };
+  // const handleInputChange = (e) => {
+  //   setkeyWords(e.target.value);
+  // };
   const getAllImages = async () => {
     let res = await axios.get("http://localhost:5000/image/allimages");
-    // console.log(res.data);
 
     setState(res.data);
   };
@@ -193,6 +233,7 @@ function Gallery() {
     });
     if (res.data.message === "Likes updated successfully") getAllImages();
   };
+  // console.log(state);
 
   const handleDownload = (imageUrl) => {
     const link = document.createElement("a");
@@ -201,7 +242,18 @@ function Gallery() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    console.log(imageUrl);
+  };
+  const handleSearch = async () => {
+    let res = await axios.post("http://localhost:5000/image/search", {
+      SearchData,
+    });
+
+    setState(res.data);
+    // console.log(res.data);
+
+    // setState(searchDta);
+    document.getElementById("searchinput").value = "";
+    // console.log(searchDta);
   };
 
   useEffect(() => {
@@ -209,6 +261,44 @@ function Gallery() {
   }, []);
   return (
     <>
+      <Flex
+        width={"800px"}
+        padding={" 15px 30px"}
+        borderBottomLeftRadius={"30px"}
+        borderBottomRightRadius={"30px"}
+        // bg={"linear-gradient(45deg, #f85a04, #51f4f5, #eab04c)"}
+        bg={"#51f4f5"}
+        margin={"auto"}
+      >
+        <InputGroup>
+          <InputLeftElement
+            className="InputLeft"
+            pointerEvents="none"
+            children={<SearchIcon className="SearchIcon" />}
+            size="xs"
+            ml={"20px"}
+          />
+          <Input
+            className="Input"
+            variant="outline"
+            onChange={(e) => setSearch(e.target.value)}
+            id="searchinput"
+            focusBorderColor="white"
+            placeholder="Type search keyword"
+            border={"2px"}
+            borderRadius={"lg"}
+            width={"95%"}
+            ml={"20px"}
+          />
+        </InputGroup>
+        <Button
+          onClick={() => handleSearch()}
+          bg={"#D1BB67"}
+          border={"2px solid black"}
+        >
+          <SearchIcon fontSize={"16px"} marginTop={"3px"} />
+        </Button>
+      </Flex>
       {/*==================== image card div=================== */}
 
       <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={4}>
@@ -255,7 +345,6 @@ function Gallery() {
                       index,
                     });
                     onOpen();
-                    // console.log(images.comment);
                   }}
                 >
                   <AiOutlineComment
@@ -348,6 +437,7 @@ function Gallery() {
                     );
                     document.querySelector("form").reset();
                   }}
+                  background={"none"}
                 >
                   <BsArrowRightCircleFill
                     style={{ color: "blue", fontSize: "30px" }}

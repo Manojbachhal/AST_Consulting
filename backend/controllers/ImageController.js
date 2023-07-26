@@ -135,6 +135,30 @@ const getAlbum = async () => {
   return newAL;
 };
 
+const getAllAlbum = async (token) => {
+  const user = verifyTOken(token);
+  console.log(user);
+  let res = await Album.find({ userid: user.email });
+  return res;
+};
+
+const getSearchdata = async (keyword) => {
+  const images = await ImageModel.find({
+    key: { $regex: keyword, $options: "i" },
+  }).exec();
+
+  const imageArray = images.map((file) => {
+    return {
+      _id: file.id,
+      key: file.key,
+      likes: file.likes,
+      comment: file.comment,
+      image: `http://localhost:5000/uploads/${file.image}`,
+    };
+  });
+  return imageArray;
+};
+
 module.exports = {
   uploadImage,
   getAllimages,
@@ -142,4 +166,6 @@ module.exports = {
   updateComment,
   createAlbum,
   getAlbum,
+  getAllAlbum,
+  getSearchdata,
 };

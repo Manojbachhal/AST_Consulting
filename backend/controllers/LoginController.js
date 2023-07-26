@@ -32,15 +32,18 @@ const GenerateToken = (user) => {
 
 const login = async ({ email, password }) => {
   let user = await User.findOne({ email });
+  // console.log(user);
   if (user) {
     user = user.toJSON();
-    console.log(user);
+    // console.log(user);
     if (password === user.password) {
       delete user.password;
       return {
         token: GenerateToken(user),
       };
     }
+  } else {
+    throw new Error("Already Registered");
   }
 };
 

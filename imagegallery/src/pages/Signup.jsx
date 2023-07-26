@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import imageUrl from "../assets/signup.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Signup() {
   const [inputData, setInputData] = useState({
@@ -36,19 +37,19 @@ function Signup() {
       });
       // console.log(data.data.message);
       if (data) {
-        // toast.success("Registration Sucessful Redirecting to Login page", {
-        //   position: "top-center",
-        //   autoClose: 2000,
-        //   hideProgressBar: false,
-        //   closeOnClick: true,
-        //   pauseOnHover: true,
-        //   draggable: true,
-        //   progress: undefined,
-        //   theme: "colored",
-        // });
-        // setTimeout(() => {
-        navigate("/sign-in");
-        // }, 2000);
+        toast.success("Registration Sucessful Redirecting to Login page", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setTimeout(() => {
+          navigate("/sign-in");
+        }, 2000);
 
         console.log(data);
       }

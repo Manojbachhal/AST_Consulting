@@ -46,15 +46,17 @@ router.get("/loggedin", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  console.log("first");
+  // console.log("first");
   try {
     const { email, password } = req.body;
     const user = await login({ email, password });
-    console.log(user);
-    res.send({
-      message: "Login successful",
-      user,
-    });
+    // console.log(user, "sddfsd");
+    if (user) {
+      res.send({
+        message: "Login successful",
+        user,
+      });
+    }
   } catch (error) {
     res.status(400).send("User Not Found");
   }

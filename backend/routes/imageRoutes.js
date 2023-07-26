@@ -10,6 +10,8 @@ const {
   updateComment,
   createAlbum,
   getAlbum,
+  getAllAlbum,
+  getSearchdata,
 } = require("../controllers/ImageController");
 const PORT = 5000;
 const storage = multer.diskStorage({
@@ -83,6 +85,27 @@ router.post("/createalbum", async (req, res) => {
 router.get("/albumnames", async (req, res) => {
   try {
     let result = await getAlbum();
+    res.send(result);
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to fetch images" });
+  }
+});
+router.post("/albums", async (req, res) => {
+  const { token } = req.body;
+  console.log(token);
+  try {
+    let result = await getAllAlbum(token);
+    res.send(result);
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to fetch images" });
+  }
+});
+
+router.post("/search", async (req, res) => {
+  const { SearchData } = req.body;
+  // console.log(token);
+  try {
+    let result = await getSearchdata(SearchData);
     res.send(result);
   } catch (error) {
     return res.status(500).json({ error: "Failed to fetch images" });

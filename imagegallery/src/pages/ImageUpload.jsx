@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Dropzone from "react-dropzone";
-import { Box, Button, Heading, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Input } from "@chakra-ui/react";
+import { toast } from "react-toastify";
 
 function ImageUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -22,16 +23,55 @@ function ImageUpload() {
         formData.append("file", selectedFile);
         formData.append("keys", myArray);
 
-        await axios.post("http://localhost:5000/image/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        let res = await axios.post(
+          "http://localhost:5000/image/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (res) {
+          toast.success("Image uploaded successfully!", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          setSelectedFile(null);
+          document.getElementById("tags").value = "";
+        }
 
         // Do something after successful upload
-        console.log("Image uploaded successfully!");
+        console.log("Image uploaded failed please try again!");
+      } else {
+        toast.error("Please select an Image", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     } catch (error) {
+      toast.error("Login failed !", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       console.error("Error uploading image:", error);
     }
   };
@@ -74,6 +114,7 @@ function ImageUpload() {
             marginRight: "10px",
             padding: "10px",
           }}
+          id="tags"
           required={true}
           onChange={handleInputChange}
         />

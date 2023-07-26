@@ -12,6 +12,8 @@ import imageUrl from "../assets/signup.jpg";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { myContext } from "../context/Contextapi";
+import { toast } from "react-toastify";
+
 function Login() {
   const [inputData, setInputData] = useState({
     email: "",
@@ -38,36 +40,36 @@ function Login() {
           password: inputData.password,
         }
       );
-      // console.log(Logindata.data.user.token);
+      console.log(Logindata);
       localStorage.setItem("Token", JSON.stringify(Logindata.data.user.token));
       localStorage.setItem("User", JSON.stringify(inputData.email));
       setLogin(!islogin);
       // signinAction(true);
 
       // console.log(Logindata.data.user.token)
-      // toast.success('Login Sucessful!', {
-      //     position: "top-center",
-      //     autoClose: 2000,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //     progress: undefined,
-      //     theme: "colored",
-      // });
+      toast.success("Login Sucessful!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       navigate("/");
     } catch (error) {
       // console.log(error)
-      // toast.error('Login failed !', {
-      //     position: "top-center",
-      //     autoClose: 5000,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //     progress: undefined,
-      //     theme: "colored",
-      // });
+      toast.error("Login failed !", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       console.log(error);
     }
   };

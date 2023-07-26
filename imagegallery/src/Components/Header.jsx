@@ -1,23 +1,13 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Collapse,
-  Flex,
-  Heading,
-  Input,
-  InputGroup,
-  InputLeftElement,
-} from "@chakra-ui/react";
+import React from "react";
+import { Box, Flex, Heading } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import logo from "../assets/image.png";
 function Header() {
-  const [searchisOpen, setSearchIsOpen] = useState(false);
   return (
     <Box
       //   bg={"linear-gradient(45deg, #8e44ad, #058eea, #7ab6de)"}
-      bg={"linear-gradient(45deg, #f85a04, #51f4f5, #eab04c)"}
+      // bg={"linear-gradient(45deg, #f85a04, #51f4f5, #eab04c)"}
+      bg={"#51f4f5"}
       // bg={"linear-gradient(45deg, #b004f8, #5189f5, #4caaea)"}
       p={"12px"}
       position="sticky"
@@ -43,39 +33,9 @@ function Header() {
           <Link to="/gallery">Upload Image</Link>
           <Link to="/sign-up">Sign up</Link>
           <Link to="/sign-in">Login</Link>
-          <Button onClick={() => setSearchIsOpen(!searchisOpen)}>
-            {!searchisOpen ? (
-              <SearchIcon fontSize={"16px"} marginTop={"3px"} />
-            ) : (
-              <CloseIcon fontSize={"12px"} />
-            )}
-          </Button>
+          <Link to="/albums">Albums</Link>
         </Flex>
       </Flex>
-
-      <Collapse in={searchisOpen} transition=" 0.3s">
-        <InputGroup>
-          <InputLeftElement
-            className="InputLeft"
-            pointerEvents="none"
-            children={<SearchIcon className="SearchIcon" color="gray.300" />}
-            size="xs"
-            ml={"20px"}
-          />
-          <Input
-            className="Input"
-            variant="outline"
-            color={"white"}
-            _placeholder={{ color: "white" }}
-            focusBorderColor="white"
-            placeholder="Type search keyword"
-            border={"2px"}
-            borderRadius={"lg"}
-            width={"95%"}
-            ml={"20px"}
-          />
-        </InputGroup>
-      </Collapse>
     </Box>
   );
 }
