@@ -257,6 +257,7 @@ function Gallery() {
     const link = document.createElement("a");
     link.href = imageUrl;
     link.download = "image.jpg";
+    link.target = "_blank"; // This will open the link in a new tab
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
