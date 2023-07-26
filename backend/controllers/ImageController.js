@@ -26,7 +26,7 @@ const getAllimages = async () => {
         key: file.key,
         likes: file.likes,
         comment: file.comment,
-        image: `http://localhost:5000/uploads/${file.image}`,
+        image: `https://splendid-getup-goat.cyclic.app/uploads/${file.image}`,
       };
     });
 
@@ -153,7 +153,7 @@ const getSearchdata = async (keyword) => {
       key: file.key,
       likes: file.likes,
       comment: file.comment,
-      image: `http://localhost:5000/uploads/${file.image}`,
+      image: `https://splendid-getup-goat.cyclic.app/uploads/${file.image}`,
     };
   });
   return imageArray;
