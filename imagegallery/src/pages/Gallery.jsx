@@ -47,7 +47,9 @@ const SecondModal = ({
   };
 
   const getAlbums = async () => {
-    let res = await axios.get("http://localhost:5000/image/albumnames");
+    let res = await axios.get(
+      "https://splendid-getup-goat.cyclic.app/image/albumnames"
+    );
     setAlbumname(res.data);
   };
 
@@ -61,11 +63,14 @@ const SecondModal = ({
 
   const handleAlbumreq = async () => {
     let token = JSON.parse(localStorage.getItem("Token"));
-    await axios.post("http://localhost:5000/image/createalbum", {
-      imageUrl,
-      albumName: AlbumnData,
-      token,
-    });
+    await axios.post(
+      "https://splendid-getup-goat.cyclic.app/image/createalbum",
+      {
+        imageUrl,
+        albumName: AlbumnData,
+        token,
+      }
+    );
     toast.success("Image Added to Album successfully", {
       position: "top-center",
       autoClose: 2000,
@@ -80,11 +85,14 @@ const SecondModal = ({
   };
   const handleAlbumreqPrev = async (name) => {
     let token = JSON.parse(localStorage.getItem("Token"));
-    await axios.post("http://localhost:5000/image/createalbum", {
-      imageUrl,
-      albumName: name,
-      token,
-    });
+    await axios.post(
+      "https://splendid-getup-goat.cyclic.app/image/createalbum",
+      {
+        imageUrl,
+        albumName: name,
+        token,
+      }
+    );
     toast.success("Image Added to Album successfully", {
       position: "top-center",
       autoClose: 2000,
@@ -188,14 +196,18 @@ function Gallery() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getAlbums = async () => {
-    let res = await axios.get("http://localhost:5000/image/albumnames");
+    let res = await axios.get(
+      "https://splendid-getup-goat.cyclic.app/image/albumnames"
+    );
     setAlbumname(res.data);
   };
   // const handleInputChange = (e) => {
   //   setkeyWords(e.target.value);
   // };
   const getAllImages = async () => {
-    let res = await axios.get("http://localhost:5000/image/allimages");
+    let res = await axios.get(
+      "https://splendid-getup-goat.cyclic.app/image/allimages"
+    );
 
     setState(res.data);
   };
@@ -207,11 +219,14 @@ function Gallery() {
   const handleCommentreq = async (id, index) => {
     let token = JSON.parse(localStorage.getItem("Token"));
 
-    let res = await axios.post("http://localhost:5000/image/addcomment", {
-      _id: id,
-      commentdata,
-      token,
-    });
+    let res = await axios.post(
+      "https://splendid-getup-goat.cyclic.app/image/addcomment",
+      {
+        _id: id,
+        commentdata,
+        token,
+      }
+    );
     if (res.data.message === "comment updated successfully") {
       const updatedData = [...state]; // Create a copy of the state array
 
@@ -227,10 +242,13 @@ function Gallery() {
   };
 
   const updateLikes = async (ele) => {
-    let res = await axios.post("http://localhost:5000/image/updateLike", {
-      _id: ele._id,
-      likes: ele.likes + 1,
-    });
+    let res = await axios.post(
+      "https://splendid-getup-goat.cyclic.app/image/updateLike",
+      {
+        _id: ele._id,
+        likes: ele.likes + 1,
+      }
+    );
     if (res.data.message === "Likes updated successfully") getAllImages();
   };
   // console.log(state);
@@ -244,9 +262,12 @@ function Gallery() {
     document.body.removeChild(link);
   };
   const handleSearch = async () => {
-    let res = await axios.post("http://localhost:5000/image/search", {
-      SearchData,
-    });
+    let res = await axios.post(
+      "https://splendid-getup-goat.cyclic.app/image/search",
+      {
+        SearchData,
+      }
+    );
 
     setState(res.data);
     // console.log(res.data);

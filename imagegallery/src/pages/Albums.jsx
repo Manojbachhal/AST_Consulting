@@ -5,9 +5,12 @@ function Albums() {
   const [allAlbums, setallAlbums] = useState([]);
   const getAllImages = async () => {
     let token = JSON.parse(localStorage.getItem("Token"));
-    let res = await axios.post("http://localhost:5000/image/albums", {
-      token,
-    });
+    let res = await axios.post(
+      "https://splendid-getup-goat.cyclic.app/image/albums",
+      {
+        token,
+      }
+    );
 
     const temp = res.data;
     const AllData = [];

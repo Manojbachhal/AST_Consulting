@@ -29,12 +29,15 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let data = await axios.post("http://localhost:5000/user/register", {
-        name: inputData.name,
+      let data = await axios.post(
+        "https://splendid-getup-goat.cyclic.app/user/register",
+        {
+          name: inputData.name,
 
-        email: inputData.email,
-        password: inputData.password,
-      });
+          email: inputData.email,
+          password: inputData.password,
+        }
+      );
       // console.log(data.data.message);
       if (data) {
         toast.success("Registration Sucessful Redirecting to Login page", {

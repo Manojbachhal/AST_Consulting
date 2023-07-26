@@ -24,7 +24,7 @@ function ImageUpload() {
         formData.append("keys", myArray);
 
         let res = await axios.post(
-          "http://localhost:5000/image/upload",
+          "https://splendid-getup-goat.cyclic.app/image/upload",
           formData,
           {
             headers: {

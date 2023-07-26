@@ -33,7 +33,7 @@ function Login() {
     e.preventDefault();
     try {
       let Logindata = await axios.post(
-        "http://localhost:5000/user/login",
+        "https://splendid-getup-goat.cyclic.app/user/login",
 
         {
           email: inputData.email,
